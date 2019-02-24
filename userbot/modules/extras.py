@@ -37,8 +37,8 @@ async def let_me_google_that_for_you(e):
                 "LMGTFY query " + message + " was executed successfully",
             )
 
-@bot.on(events.NewMessage(outgoing=True, pattern="^;_;$"))
-@bot.on(events.MessageEdited(outgoing=True, pattern="^;_;$"))
+@bot.on(events.NewMessage(outgoing=True, pattern="^;__;$"))
+@bot.on(events.MessageEdited(outgoing=True, pattern="^;__;$"))
 async def fun(e):
     t = ";__;"
     for j in range(10):
