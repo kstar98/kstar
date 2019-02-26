@@ -195,6 +195,67 @@ For using Heroku CLI on termux, please Google on it.
 `.download`
 `.getqr`
 
+
+### Extras 
+
+`;_;` (Same as -_-)
+
+`.fp`:face palm emoji
+
+`.cry`:Cry
+
+`.git`: .git {username} to get info about that GitHub users.
+
+`.leave`: Leave Chat.
+
+`.stats`: .count will give your stats try once you'll get.
+
+`.unbanall`: Unban All Users From a Group.
+
+`.kick {}`: kick the users which u want to kick, Eg: d=Deleted Accounts.
+
+`.disapprove`: Disapprove The User To Pm You.
+
+Chat Stalk forwards messages got in a chat to your logger
+
+`.csset` - Sets chat stalk ID to None / disables it
+`.csset chatid` - Sets chat stalk ID to chatid
+`.csset c` - Sets chat stalk ID to the current chat
+`.csset s` - WARNING: CRAPPY
+             SUPER chat stalks (saves message to a file on disk)
+`.cs` - Displays chat stalk ID
+
+Delete all is self-explanitory
+
+`.delall True` and `.delall False` - self-explanitory
+`.dt message` - Makes `message` goes through delete all
+
+`.timer message` - Self-exploding message, counter is visible
+`.ftimer message` - Fakes self-exploding message, counter is visible
+`.stimer message` - Secret self-exploding message, counter is invisible
+`.time` - REMEMBER TO REPLY TO A MESSAGE
+          Explodes the replied to message, counter is visible
+`.stime` - REMEMBER TO REPLY TO A MESSAGE
+          Secretly explodes the replied to message, counter is invisible
+
+Edits - Edits a message
+
+`.edit message` - Edits the message to `message`, useful to not trigger stuff
+`.sedit message` - Secretly edits the replied to message, depends on @regexbot
+`.sedita message` - Alternative to .sedit, might not work
+
+`.send username message` - Sends `message` to `username`
+
+`.lchatid` - Sends chat ID to your logger
+
+`.restart` - Restarts the bot
+
+`.environ ENVIRONMENT_VARIABLE` - Sends you `ENVIRONMENT_VARIABLE` (try `HOME`)
+
+`.sendspam <message>` - Sends `<message>`/a number and deletes it and rinse and
+                        repeat 24 more times
+`.sendspam2 <message>` - Sends `<message>`/a number and 
+
 ### Creating your own modules.
 
 Creating a module has been simplified as much as possible - but do not hesitate to suggest further simplification.
