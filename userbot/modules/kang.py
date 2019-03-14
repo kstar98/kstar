@@ -1,16 +1,15 @@
 import io
 import math
-from PIL import Image
 import urllib.request
 
-from telethon import events
+from PIL import Image
 from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
 
 from userbot import bot
+from userbot.events import register
 
 
-@bot.on(events.NewMessage(pattern="^.kang", outgoing=True))
-@bot.on(events.MessageEdited(pattern="^.kang", outgoing=True))
+@register(outgoing=True, pattern="^.kang")
 async def kang(args):
     if not args.text[0].isalpha() and args.text[0] not in ("/", "#", "@", "!"):
         user = await bot.get_me()
@@ -69,31 +68,40 @@ async def kang(args):
                 async with bot.conversation('Stickers') as conv:
                     await conv.send_message('/addsticker')
                     await conv.get_response()
+                    await bot.send_read_acknowledge(conv.chat_id)     #Ensure user doesn't get spamming notifications
                     await conv.send_message(packname)
                     await conv.get_response()
                     file.seek(0)
+                    await bot.send_read_acknowledge(conv.chat_id)     #Ensure user doesn't get spamming notifications
                     await conv.send_file(file, force_document=True)
                     await conv.get_response()
                     await conv.send_message(emoji)
+                    await bot.send_read_acknowledge(conv.chat_id)     #Ensure user doesn't get spamming notifications
                     await conv.get_response()
                     await conv.send_message('/done')
                     await conv.get_response()
+                    await bot.send_read_acknowledge(conv.chat_id)     #Ensure user doesn't get spamming notifications
             else:
                 await args.edit("userbot sticker pack doesn't exist! Making a new one!")
                 async with bot.conversation('Stickers') as conv:
                     await conv.send_message('/newpack')
                     await conv.get_response()
+                    await bot.send_read_acknowledge(conv.chat_id)     #Ensure user doesn't get spamming notifications
                     await conv.send_message(f"@{username}'s userbot pack")
                     await conv.get_response()
+                    await bot.send_read_acknowledge(conv.chat_id)     #Ensure user doesn't get spamming notifications
                     file.seek(0)
                     await conv.send_file(file, force_document=True)
                     await conv.get_response()
                     await conv.send_message(emoji)
+                    await bot.send_read_acknowledge(conv.chat_id)     #Ensure user doesn't get spamming notifications
                     await conv.get_response()
                     await conv.send_message("/publish")
+                    await bot.send_read_acknowledge(conv.chat_id)     #Ensure user doesn't get spamming notifications
                     await conv.get_response()
                     await conv.send_message(packname)
+                    await bot.send_read_acknowledge(conv.chat_id)     #Ensure user doesn't get spamming notifications
                     await conv.get_response()
+                    await bot.send_read_acknowledge(conv.chat_id)     #Ensure user doesn't get spamming notifications
 
             await args.edit(f"sticker added! Your pack can be found [here](t.me/addstickers/{packname})", parse_mode='md')
-
