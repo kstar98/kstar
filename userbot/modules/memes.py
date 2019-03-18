@@ -11,10 +11,12 @@ import re
 import time
 
 from spongemock import spongemock
+from telethon import TelegramClient, events
 from zalgo_text import zalgo
 
 from userbot import (DISABLE_RUN, WIDE_MAP)
 from userbot.events import register
+from collections import deque
 
 #================= CONSTANT =================
 METOOSTR = [
@@ -200,10 +202,10 @@ async def kek(keks):
 
 @register(outgoing=True, pattern="^-_-$")
 async def lol(lel):
-    ok = "-_-"
-    if range(10):
-        ok = ok[:-1] + "_-"
-        await lel.edit(ok)
+    t = "-_-"
+    for j in range(10):
+        t = t[:-1] + "_-"
+        await lel.edit(t)
 
 
 @register(outgoing=True, pattern="^.cp")
@@ -287,11 +289,6 @@ async def zal(zgfy):
         input_text = " ".join(message).lower()
         zalgofied_text = zalgo.zalgo().zalgofy(input_text)
         await zgfy.edit(zalgofied_text)
-
-
-@register(outgoing=True, pattern="^hi$")
-async def hoi(ha):
-    await ha.edit("Hoi!😄")
 
 
 @register(outgoing=True, pattern="^.owo (.*)")
@@ -422,3 +419,14 @@ async def typewriter(typew):
             await asyncio.sleep(sleep_time)
             await typew.edit(old_text)
             await asyncio.sleep(sleep_time)
+
+
+@register(outgoing=True, pattern="^.moon$")
+async def _(event):
+	if event.fwd_from:
+		return
+	deq = deque(list("🌗🌘🌑🌒🌓🌔🌕🌖"))
+	for _ in range(32):
+		await asyncio.sleep(0.1)
+		await event.edit("".join(deq))
+		deq.rotate(1)
