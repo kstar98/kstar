@@ -1,3 +1,4 @@
+
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
@@ -8,10 +9,12 @@ from asyncio import create_subprocess_shell as asyncrunapp
 from asyncio.subprocess import PIPE as asyncPIPE
 from platform import python_version, uname
 from shutil import which
+from .._version import __version__
 
+from telethon import events
 from telethon import version
 
-from userbot import LOGGER, LOGGER_GROUP
+from userbot import LOGGER, LOGGER_GROUP, HELPER
 from userbot.events import register
 
 
@@ -20,7 +23,7 @@ async def sysdetails(sysd):
     if not sysd.text[0].isalpha() and sysd.text[0] not in ("/", "#", "@", "!"):
         try:
             neo = "neofetch --off --color_blocks off --bold off --cpu_temp C \
-                    --cpu_speed on --cpu_cores physical --stdout"
+                    --cpu_speed on --cpu_cores physical --kernel_shorthand off --stdout"
             fetch = await asyncrunapp(
                 neo,
                 stdout=asyncPIPE,
@@ -99,11 +102,13 @@ async def pipcheck(pip):
 @register(outgoing=True, pattern="^.alive$")
 async def amireallyalive(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        bot_version = __version__.public()
         await e.edit(
             "`"
-            "Boss I am running \n\n"
+            "boss😑 I'm running \n\n"
+            f"Telegram-Userbot: {bot_version} \n"
             f"Telethon version: {version.__version__} \n"
-            f"Python          : {python_version()} \n"
-            f"User            : Thago"
+            f"Python version  : {python_version()} \n"
+            f"Username        : Thagoo"
             "`"
             )
