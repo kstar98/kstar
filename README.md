@@ -50,8 +50,7 @@ If you find any bugs or have any suggestions then don't hesitate to contact me i
 
 ### Before you start:
 
-Clone this repo `git clone https://github.com/baalajimaestro/Telegram-UserBot`
-
+Clone this repo git clone www.github.com/Thagoo/Tbot2 -b staging
 Pip install all the requirements, `pip3 install -r requirements.txt`
 
 Get your api-id (called `API_KEY` in this bot) and API_HASH from my.telegram.org.
