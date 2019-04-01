@@ -32,7 +32,6 @@ announcements you can join the [news channel](https://t.me/maestro_userbot_chann
 
 If you find any bugs or have any suggestions then don't hesitate to contact me in [my support group](https://t.me/userbot_support).
 
-<<<<<<< HEAD
 - This README is not guaranteed to always be up to date, refer to the [support channel](https://t.me/maestro_userbot_channel) for the latest informations.
 
 ## Getting your own userbot up and running:
@@ -54,7 +53,7 @@ If you find any bugs or have any suggestions then don't hesitate to contact me i
 
 ### Before you start:
 
-Clone this repo `git clone https://github.com/baalajimaestro/Telegram-UserBot`
+Clone this repo - git clone https://github.com/Thagoo/Tbot2 -b staging 
 
 Pip install all the requirements, `pip3 install -r requirements.txt`
 
