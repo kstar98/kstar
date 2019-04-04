@@ -1,8 +1,10 @@
-
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
+"""
+Userbot module which has commands related to and requiring admin privileges to use
+"""
 
 from time import sleep
 
@@ -13,10 +15,7 @@ from telethon.tl.functions.channels import (EditAdminRequest,
                                             EditBannedRequest,
                                             EditPhotoRequest)
 from telethon.tl.types import (ChatAdminRights, ChatBannedRights,
-                               MessageMediaDocument, MessageMediaPhoto)
-
-from telethon.tl.types import ChatAdminRights, ChatBannedRights
-from telethon.tl.functions.users import GetFullUserRequest
+                               MessageMediaPhoto)
 
 from userbot import (BRAIN_CHECKER, LOGGER, LOGGER_GROUP, HELPER, bot)
 from userbot.events import register
@@ -36,6 +35,7 @@ INVALID_MEDIA = "`Invalid Extension`"
 
 @register(outgoing=True, pattern="^.setgrouppic$")
 async def set_group_photo(gpic):
+    """ For .setgrouppic command, changes the picture of a group """
     if not gpic.text[0].isalpha() and gpic.text[0] not in ("/", "#", "@", "!"):
         replymsg = await gpic.get_reply_message()
         chat = await gpic.get_chat()
@@ -83,9 +83,9 @@ async def promote(promt):
 
         # Self explanatory
         if not await promt.get_reply_message():
-            await promt.edit("`Boss Gib a reply message`")
-        elif not admin and creator:
-            rights = new_rights
+            await promt.edit("`Give a reply message`")
+        else:
+            await promt.edit("`Promoting...`")
 
         # Try to promote if current user is admin or creator
         try:
@@ -100,7 +100,7 @@ async def promote(promt):
         # we don't have Promote permission
         except BadRequestError:
             await promt.edit(
-                "`Ooof ! Boss😎 ,You are not admin in this **CANCEROUS** group `"
+                "`You Don't have sufficient permissions to parmod`"
                 )
             return
 
@@ -121,11 +121,11 @@ async def demote(dmod):
             return
         # If not admin and not creator, also return
         if not admin and not creator:
-            await dmod.edit("`Ooof ! Boss😎 ,You are not admin in this **CANCEROUS** group `")
+            await dmod.edit("`You aren't an admin!`")
             return
 
         # If passing, declare that we're going to demote
-        await dmod.edit("`The Bitch is being Demoted...`")
+        await dmod.edit("`Demoting...`")
 
         # New rights after demotion
         newrights = ChatAdminRights(
@@ -148,10 +148,10 @@ async def demote(dmod):
         # Assume we don't have permission to demote
         except BadRequestError:
             await dmod.edit(
-                "`Ooof ! You dont Have permission to demote!`"
+                "`You Don't have sufficient permissions to demhott`"
                 )
             return
-        await dmod.edit("`Demoted The bitch Successfully!`")
+        await dmod.edit("`Demoted Successfully!`")
 
 
 @register(outgoing=True, pattern="^.ban$")
@@ -180,7 +180,7 @@ async def thanos(bon):
 
         # Well
         if not admin and not creator:
-            await bon.edit("`Ooof ! Boss😎 ,You are not admin in this **CANCEROUS** group `")
+            await bon.edit("`You aren't an admin!`")
             return
 
         # If the user is a sudo
@@ -194,26 +194,27 @@ async def thanos(bon):
         # This exception handled if the user doesn't
         # Specifying any target (reply in this case)
         except AttributeError:
+            await bon.edit("`You don't seems to do this right`")
             return
 
         # Announce that we're going to whacking the pest
         await bon.edit("`Whacking the pest!`")
         try:
             await bon.client(
-            EditBannedRequest(
-                bon.chat_id,
-                sender.sender_id,
-                banned_rights
+                EditBannedRequest(
+                    bon.chat_id,
+                    sender.sender_id,
+                    banned_rights
+                )
             )
-        )
-        except Exception as e:
+        except Exception:
             await bon.edit("`I couldn't ban this user! Possible reasons: \
                              Maybe the admin status was appointed by someone else.`")
             return
         # Helps ban group join spammers more easily
         try:
-            await sender.delete() 
-        except Exception as e:
+            await sender.delete()
+        except Exception:
             await bon.edit("`I dont have message nuking rights! But still he was banned!`")
             return
         # Delete message and then tell that the command
@@ -234,6 +235,7 @@ async def thanos(bon):
 
 @register(outgoing=True, pattern="^.unban$")
 async def nothanos(unbon):
+    """ For .unban command, undo "thanos" on target """
     if not unbon.text[0].isalpha() and unbon.text[0] \
             not in ("/", "#", "@", "!"):
         rights = ChatBannedRights(
@@ -253,7 +255,7 @@ async def nothanos(unbon):
                 replymsg.sender_id,
                 rights
                 ))
-            await unbon.edit("```Unbanned the bitch Successfully```")
+            await unbon.edit("```Unbanned Successfully```")
 
             if LOGGER:
                 await unbon.client.send_message(
@@ -263,7 +265,7 @@ async def nothanos(unbon):
                     + "`",
                 )
         except UserIdInvalidError:
-            await unbon.edit("`Cant use Magic Wand Boss😎`")
+            await unbon.edit("`Uh oh my unban logic broke!`")
 
 
 @register(outgoing=True, pattern="^.mute$")
@@ -282,8 +284,8 @@ async def spider(spdr):
 
         # Check if the function running under SQL mode
         try:
-            from userbot import MONGO
-        except Exception:
+            from userbot.modules.sql_helper.spam_mute_sql import mute
+        except AttributeError:
             await spdr.edit("`Running on Non-SQL mode!`")
             return
 
@@ -296,31 +298,30 @@ async def spider(spdr):
 
         # If not admin and not creator, return
         if not admin and not creator:
-            await spdr.edit("`Ooof ! Boss😎 ,You are not admin in this **CANCEROUS** group `")
+            await spdr.edit("`You aren't an admin!`")
             return
 
         target = await spdr.get_reply_message()
         # Else, do announce and do the mute
-        MONGO.mutes.insert_one(
-            {"chat_id":spdr.chat_id, "sender":target.sender_id}
-            )
-        await spdr.edit("`Here is your glue`")
+        mute(spdr.chat_id, target.sender_id)
+        await spdr.edit("`Gets a tape!`")
 
         # Announce that the function is done
-        await spdr.edit("`You have been sucessfully used the glue`")
+        await spdr.edit("`Safely taped!`")
 
         # Announce to logging group
         if LOGGER:
-            await spdr.send_message(
+            await spdr.client.send_message(
                 LOGGER_GROUP,
                 "#MUTE\n"
-                +"ID: `"+ str(target.sender_id)
+                +"ID: `"+ str((await spdr.get_reply_message()).sender_id)
                 + "`",
             )
 
 
 @register(outgoing=True, pattern="^.unmute$")
 async def unmoot(unmot):
+    """ For .unmute command, unmute the target """
     if not unmot.text[0].isalpha() and unmot.text[0] \
             not in ("/", "#", "@", "!"):
         rights = ChatBannedRights(
@@ -333,46 +334,38 @@ async def unmoot(unmot):
             send_inline=None,
             embed_links=None,
             )
-        try:
-            from userbot import MONGO
-        except Exception:
-            await unmot.edit("`Running on non-SQL mode`")
         replymsg = await unmot.get_reply_message()
-        MONGO.mutes.delete_one(
-            {"chat_id":unmot.chat_id, "sender":replymsg.sender_id}
-            )
+        from userbot.modules.sql_helper.spam_mute_sql import unmute
+        unmute(unmot.chat_id, replymsg.sender_id)
         try:
-            await unmot.client(EditBannedRequest(
-                unmot.chat_id,
-                replymsg.sender_id,
-                rights
-                ))
-            MONGO.mutes.delete_one(
-                {"sender":replymsg.sender_id}
+            await unmot.client(
+                EditBannedRequest(
+                    unmot.chat_id,
+                    replymsg.sender_id,
+                    rights
                 )
+            )
             await unmot.edit("```Unmuted Successfully```")
         except UserIdInvalidError:
             await unmot.edit("`Uh oh my unmute logic broke!`")
         if LOGGER:
-            await unmot.send_message(
+            await unmot.client.send_message(
                 LOGGER_GROUP,
                 "#MUTE\n"
                 +"ID: `"+ str((await unmot.get_reply_message()).sender_id)
                 + "`",
-            )       
+            )
 
 @register(incoming=True)
 async def muter(moot):
+    """ Used for deleting the messages of muted people """
     try:
-        from userbot import MONGO
-    except:
+        from userbot.modules.sql_helper.spam_mute_sql import is_muted
+        from userbot.modules.sql_helper.gmute_sql import is_gmuted
+    except AttributeError:
         return
-    muted = MONGO.mutes.find_one(
-            {"chat_id":moot.chat_id, "sender":moot.sender_id}
-            )
-    gmuted = MONGO.gmutes.find_one(
-            {"sender":moot.sender_id}
-            )
+    muted = is_muted(moot.chat_id)
+    gmuted = is_gmuted(moot.sender_id)
     rights = ChatBannedRights(
                 until_date=None,
                 send_messages=True,
@@ -384,53 +377,46 @@ async def muter(moot):
                 embed_links=True,
                 )
     if muted:
+        for i in muted:
+            if str(i.sender) == str(moot.sender_id):
                 await moot.delete()
                 await moot.client(EditBannedRequest(
                     moot.chat_id,
                     moot.sender_id,
                     rights
-                    ))
-    if gmuted:
-                await moot.delete()
-
+                ))
+    for i in gmuted:
+        if i.sender == str(moot.sender_id):
+            await moot.delete()
 
 @register(outgoing=True, pattern="^.ungmute$")
-async def ungmoot(ungmoot):
-    if not ungmoot.text[0].isalpha() and ungmoot.text[0] \
+async def ungmoot(un_gmute):
+    """ For .ungmute command, ungmutes the target in the userbot """
+    if not un_gmute.text[0].isalpha() and un_gmute.text[0] \
             not in ("/", "#", "@", "!"):
-        reply = await ungmoot.get_reply_message()
-        replied_user = await ungmoot.client(GetFullUserRequest(reply.from_id))
-        aname = replied_user.user.id
         try:
-            from userbot import MONGO
-        except:
-            await ungmoot.edit('`Running on Non-SQL Mode!`')
-        MONGO.gmutes.delete_one(
-            {"sender":replied_user.user.id}
-            )
-        await ungmoot.edit("```Ungmuted Successfully```")
+            from userbot.modules.sql_helper.gmute_sql import ungmute
+        except AttributeError:
+            await un_gmute.edit('`Running on Non-SQL Mode!`')
+        ungmute(str((await un_gmute.get_reply_message()).sender_id))
+        await un_gmute.edit("```Ungmuted Successfully```")
 
 
 @register(outgoing=True, pattern="^.gmute$")
 async def gspider(gspdr):
+    """ For .gmute command, gmutes the target in the userbot """
     if not gspdr.text[0].isalpha() and gspdr.text[0] not in ("/", "#", "@", "!"):
         if (await gspdr.get_reply_message()).sender_id in BRAIN_CHECKER:
             await gspdr.edit("`Mute Error! Couldn't mute this user`")
             return
-        reply = await gspdr.get_reply_message()
-        replied_user = await gspdr.client(GetFullUserRequest(reply.from_id))
-        aname = replied_user.user.id
         try:
-            from userbot import MONGO
-        except Exception as err:
-            print(err)
+            from userbot.modules.sql_helper.gmute_sql import gmute
+        except AttributeError as err:
             await gspdr.edit("`Running on Non-SQL mode!`")
             return
 
-        MONGO.gmutes.insert_one(
-            {"sender":replied_user.user.id}
-            )
-        await gspdr.edit("`Ooof ! Here's your strong tape , apply it in ur mouth`")
+        gmute(str((await gspdr.get_reply_message()).sender_id))
+        await gspdr.edit("`Grabs a huge, sticky duct tape!`")
         sleep(5)
         await gspdr.delete()
         await gspdr.respond("`Taped!`")
@@ -443,26 +429,27 @@ async def gspider(gspdr):
             )
 
 HELPER.update({
-    "promote": "Usage: \nReply someone's message with .promote to promote them."
+    "promote": "Usage: Reply to someone's message with .promote to promote them."
 })
 HELPER.update({
-    "ban": "Usage: \nReply someone's message with .ban to ban them."
+    "ban": "Usage: Reply to someone's message with .ban to ban them."
 })
 HELPER.update({
-    "demote": "Usage: \nReply someone's message with .demote to revoke their admin permissions."
+    "demote": "Usage: Reply to someone's message with .demote to revoke their admin permissions."
 })
 HELPER.update({
-    "unban": "Usage: \nReply someone's message with .unban to unban them in this chat."
+    "unban": "Usage: Reply to someone's message with .unban to unban them in this chat."
 })
 HELPER.update({
-    "mute": "Usage: \nReply someone's message with .mute to mute them, works on admins too"
+    "mute": "Usage: Reply to someone's message with .mute to mute them, works on admins too"
 })
 HELPER.update({
-    "unmute": "Usage: \nReply someone's message with .unmute to remove them from muted list."
+    "unmute": "Usage: Reply to someone's message with .unmute to remove them from muted list."
 })
 HELPER.update({
-    "gmute": "Usage: \nReply someone's message with .gmute to mute them in all groups you have in common with them."
+    "gmute": "Usage: Reply to someone's message with .gmute to mute them in all \
+groups you have in common with them."
 })
 HELPER.update({
-    "ungmute": "Usage: \nReply someone's message with .ungmute to remove them from the gmuted list."
+    "ungmute": "Usage: Reply someone's message with .ungmute to remove them from the gmuted list."
 })
