@@ -83,7 +83,7 @@ async def promote(promt):
 
         # Self explanatory
         if not await promt.get_reply_message():
-            await promt.edit("`Jeepeo Gib a reply message`")
+            await promt.edit("`Boss Gib a reply message`")
         elif not admin and creator:
             rights = new_rights
 
@@ -100,7 +100,7 @@ async def promote(promt):
         # we don't have Promote permission
         except BadRequestError:
             await promt.edit(
-                "`Ooof ! Jeepeo😎 ,You are not admin in this **CANCEROUS** group `"
+                "`Ooof ! Boss😎 ,You are not admin in this **CANCEROUS** group `"
                 )
             return
 
@@ -121,7 +121,7 @@ async def demote(dmod):
             return
         # If not admin and not creator, also return
         if not admin and not creator:
-            await dmod.edit("`Ooof ! Jeepeo😎 ,You are not admin in this **CANCEROUS** group `")
+            await dmod.edit("`Ooof ! Boss😎 ,You are not admin in this **CANCEROUS** group `")
             return
 
         # If passing, declare that we're going to demote
@@ -180,7 +180,7 @@ async def thanos(bon):
 
         # Well
         if not admin and not creator:
-            await bon.edit("`Ooof ! Jeepeo😎 ,You are not admin in this **CANCEROUS** group `")
+            await bon.edit("`Ooof ! Boss😎 ,You are not admin in this **CANCEROUS** group `")
             return
 
         # If the user is a sudo
@@ -263,7 +263,7 @@ async def nothanos(unbon):
                     + "`",
                 )
         except UserIdInvalidError:
-            await unbon.edit("`Cant use Magic Wand Jeepeo😎`")
+            await unbon.edit("`Cant use Magic Wand Boss😎`")
 
 
 @register(outgoing=True, pattern="^.mute$")
@@ -296,7 +296,7 @@ async def spider(spdr):
 
         # If not admin and not creator, return
         if not admin and not creator:
-            await spdr.edit("`Ooof ! Jeepeo😎 ,You are not admin in this **CANCEROUS** group `")
+            await spdr.edit("`Ooof ! Boss😎 ,You are not admin in this **CANCEROUS** group `")
             return
 
         target = await spdr.get_reply_message()

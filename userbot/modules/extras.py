@@ -7,7 +7,7 @@ from telethon.tl.functions.channels import LeaveChannelRequest, CreateChannelReq
 
 @register(outgoing=True, pattern="^.timer")
 async def timer_blankx(e):
-	txt=e.text[7:] + '\nJeepeo , I am Deleting the message in T-minus '
+	txt=e.text[7:] + '\nBoss , I am Deleting the message in T-minus '
 	j=15
 	k=j
 	for j in range(j):
@@ -25,7 +25,7 @@ async def stimer_blankx(e):
 @register(outgoing=True, pattern="^.time$")
 async def time_blankx(e):
 	if e.reply_to_msg_id != None:
-		thed='Jeepeo , I am Deleting replied to message in '
+		thed='Boss , I am Deleting replied to message in '
 		j=10
 		k=j
 		for j in range(j):
