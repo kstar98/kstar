@@ -73,7 +73,7 @@ async def neardc(e):
 async def pingme(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         start = datetime.now()
-        await e.edit("`JeepPong😎`")
+        await e.edit("`Pong`")
         end = datetime.now()
         ms = (end - start).microseconds / 1000
-        await e.edit("JeepPong! | %sms" % (ms))
+        await e.edit("Pong! | %sms" % (ms))
